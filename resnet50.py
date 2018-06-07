@@ -4,22 +4,21 @@ from __future__ import print_function
 
 import numpy as np
 import tensorflow as tf
+import os
+import numpy as np
+from PIL import Image
 
 tf.logging.set_verbosity(tf.logging.INFO)
 
 # Instantiate a Keras inception v3 model.
 keras_resnet50 = tf.keras.applications.resnet50.ResNet50(weights=None, classes=4)
 # Compile model with the optimizer, loss, and metrics you'd like to train with.
-keras_resnet50.compile(optimizer=tf.keras.optimizers.SGD(lr=0.0001, momentum=0.9),
+keras_resnet50.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0003),
                           loss='categorical_crossentropy',
                           metric='accuracy')
 # Create an Estimator from the compiled Keras model. Note the initial model
 # state of the keras model is preserved in the created Estimator.
 estimator_resnet50 = tf.keras.estimator.model_to_estimator(keras_model=keras_resnet50)
-
-import os
-import numpy as np
-from PIL import Image
 
 image_path = '/Users/rubans/Desktop/flowers'
 def deal_with_one_floder(floder_path, label_class, img_label_dict):
@@ -98,12 +97,12 @@ def main(unused_argv):
     train_input_fn = tf.estimator.inputs.numpy_input_fn(
         x={"input_2": train_data},
         y=train_labels,
-        batch_size=4,
+        batch_size=16,
         num_epochs=None,
         shuffle=True)
     estimator_resnet50.train(
         input_fn=train_input_fn,
-        steps=200)
+        steps=200000)
 
     # Evaluate the model and print results
 #     eval_input_fn = tf.estimator.inputs.numpy_input_fn(

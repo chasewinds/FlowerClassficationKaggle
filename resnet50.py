@@ -24,7 +24,14 @@ image_path = '/home/rubans/proj/kaggle/flower/dataset/flowers'
 def deal_with_one_floder(floder_path, label_class, img_label_dict):
     for image_name in os.listdir(floder_path):
         image_path = os.path.join(floder_path, image_name)
-        img_label_dict[image_path] = label_class
+        if label_class == 0:
+            img_label_dict[image_path] = '1000'
+        elif label_class == 1:
+            img_label_dict[image_path] = '0100'
+        elif label_class == 2:
+            img_label_dict[image_path] = '0010'
+        elif label_class == 3:
+            img_label_dict[image_path] = '0001'
 
 label_class = 0
 image_label_dict = {}
@@ -97,7 +104,7 @@ def main(unused_argv):
     input_str = str(keras_resnet50.input_names)
     train_input_fn = tf.estimator.inputs.numpy_input_fn(
         x={"input_1": train_data},
-        y=tf.one_hot(train_labels, 4),
+        y=train_labels,
         batch_size=16,
         num_epochs=None,
         shuffle=True)

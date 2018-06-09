@@ -20,7 +20,7 @@ keras_resnet50.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0003),
 # state of the keras model is preserved in the created Estimator.
 estimator_resnet50 = tf.keras.estimator.model_to_estimator(keras_model=keras_resnet50)
 
-image_path = '/Users/rubans/Desktop/flowers'
+image_path = '/home/rubans/proj/kaggle/flower/dataset/flowers'
 def deal_with_one_floder(floder_path, label_class, img_label_dict):
     for image_name in os.listdir(floder_path):
         image_path = os.path.join(floder_path, image_name)
@@ -62,8 +62,9 @@ for k, v in image_label_dict.items():
 np_img_arr = np.asarray(image_arr, dtype=np.float32)
 print(np_img_arr.shape)
 
-np_label_arr = np.asarray(label_arr, dtype=np.float32)
+np_label_arr = np.asarray(label_arr, dtype=np.int32)
 print(np_label_arr.shape)
+print(np_label_arr)
 
 def main(unused_argv):
     # Load training and eval data
@@ -73,10 +74,10 @@ def main(unused_argv):
 #     eval_data = mnist.test.images  # Returns np.array
 #     eval_labels = np.asarray(mnist.test.labels, dtype=np.int32)
 
-    train_data = np_img_arr[:100]  # Returns np.array
-    train_labels = np_label_arr[:100]
-    eval_data = np_img_arr[100:200]  # Returns np.array
-    eval_labels = np_label_arr[100:200]
+    train_data = np_img_arr  # Returns np.array
+    train_labels = np_label_arr
+    eval_data = np_img_arr  # Returns np.array
+    eval_labels = np_label_arr
 
 
     
@@ -95,8 +96,8 @@ def main(unused_argv):
     # Train the model
     input_str = str(keras_resnet50.input_names)
     train_input_fn = tf.estimator.inputs.numpy_input_fn(
-        x={"input_2": train_data},
-        y=train_labels,
+        x={"input_1": train_data},
+        y=tf.one_hot(train_labels, 4),
         batch_size=16,
         num_epochs=None,
         shuffle=True)

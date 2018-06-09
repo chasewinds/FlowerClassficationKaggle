@@ -105,7 +105,7 @@ def cnn_model_fn(features, labels, mode):
 
 def main(unused_argv):
     # Load training and eval data
-    image_path = '/Users/rubans/flowers'
+    image_path = '/home/rubans/proj/kaggle/flower/dataset/flowers'
     def deal_with_one_floder(floder_path, label_class, img_label_dict):
         for image_name in os.listdir(floder_path):
             image_path = os.path.join(floder_path, image_name)

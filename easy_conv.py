@@ -72,7 +72,7 @@ def cnn_model_fn(features, labels, mode):
     # Logits layer
     # Input Tensor Shape: [batch_size, 1024]
     # Output Tensor Shape: [batch_size, 10]
-    logits = tf.layers.dense(inputs=dropout, units=10)
+    logits = tf.layers.dense(inputs=dropout, units=4)
 
     predictions = {
         # Generate predictions (for PREDICT and EVAL mode)
@@ -123,10 +123,10 @@ def main(unused_argv):
 
     print("Finish process images")
 
-    def read_jpg(image_path):
-        decode_image = tf.image.decode_jpeg(image_path)
-        resized_image = tf.image.resize_images(decode_image, [224, 224])
-        return resized_image
+    # def read_jpg(image_path):
+    #     decode_image = tf.image.decode_jpeg(image_path)
+    #     resized_image = tf.image.resize_images(decode_image, [224, 224])
+    #     return resized_image
 
     image_arr = []
     label_arr = []
@@ -181,7 +181,8 @@ def main(unused_argv):
         shuffle=True)
     mnist_classifier.train(
         input_fn=train_input_fn,
-        steps=20000)
+        steps=20000,
+        hooks=[logging_hook])
 
     # Evaluate the model and print results
     eval_input_fn = tf.estimator.inputs.numpy_input_fn(

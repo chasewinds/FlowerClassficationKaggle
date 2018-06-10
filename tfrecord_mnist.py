@@ -34,7 +34,7 @@ def convert_to(data_set, name):
     cols = images.shape[2]
     depth = images.shape[3]
 
-    filename = os.path.join(FLAGS.directory, name + '.tfrecords')
+    filename = os.path.join('/mnist', name + '.tfrecords')
     print('Writing', filename)
     with tf.python_io.TFRecordWriter(filename) as writer:
         for index in range(num_examples):
@@ -53,10 +53,10 @@ def convert_to(data_set, name):
 
 def main(unused_argv):
     # Get the data.
-    data_sets = mnist.read_data_sets(FLAGS.directory,
+    data_sets = mnist.read_data_sets('/mnist',
                                      dtype=tf.uint8,
                                      reshape=False,
-                                     validation_size=FLAGS.validation_size)
+                                     validation_size=5000)
 
     # Convert to Examples and write the result to TFRecords.
     convert_to(data_sets.train, 'train')
@@ -65,21 +65,22 @@ def main(unused_argv):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-      '--directory',
-      type=str,
-      default='/mnist',
-      help='Directory to download data files and write the converted result'
-    )
-    parser.add_argument(
-      '--validation_size',
-      type=int,
-      default=5000,
-      help="""\
-      Number of examples to separate from the training data for the validation
-      set.\
-      """
-    )
-    FLAGS, unparsed = parser.parse_known_args()
-    tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument(
+    #   '--directory',
+    #   type=str,
+    #   default='/mnist',
+    #   help='Directory to download data files and write the converted result'
+    # )
+    # parser.add_argument(
+    #   '--validation_size',
+    #   type=int,
+    #   default=5000,
+    #   help="""\
+    #   Number of examples to separate from the training data for the validation
+    #   set.\
+    #   """
+    # )
+    # FLAGS, unparsed = parser.parse_known_args()
+    # tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
+    tf.app.run(main=main)
